@@ -33,7 +33,14 @@ To run the Flask app locally, use the following command:
 ```bash
 python app.py
 ```
-### 2. Update a Secret:
+### 2. Create Secret File
+
+You can create a secret file to store secret. Use the following curl command to update a secret:
+
+```bash
+curl -X GET "http://127.0.0.1:5000/create?secret_file=data"
+```
+### 3. Update a Secret:
 
 You can update a secret in the encrypted file using the PUT request. Use the following curl command to update a secret:
 
@@ -45,7 +52,15 @@ curl -X PUT "http://127.0.0.1:5000/update?file_path=data-encript" \
 - **file_path:** The path to the encrypted file where the secret is stored.
 - **data:** The JSON data that contains the secret you want to store (e.g., {"gender": "male"}).
 
-### 3. Retrieve a Secret:
+### 4. List The Secrets File 
+
+To list the encrypted secret file, use the GET request. The following curl command decrypts and retrieves the secret:
+
+```bash 
+curl -X GET "http://127.0.0.1:5000/list
+```
+
+### 5. Retrieve a Secret:
 
 To retrieve a secret from the encrypted file, use the GET request. The following curl command decrypts and retrieves the secret:
 

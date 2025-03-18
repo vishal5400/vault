@@ -21,6 +21,17 @@ def dip(name, file, token):
     di= f"openssl enc -d -aes-256-cbc -in {name}.enc -out {file} -pass pass:{token}"
     return (os.system(di))
 
+@app.route('/create', methods=['GET'])
+def create():
+    secret_file = request.args.get('secret_file')
+    os.system(f'touch {secret_file}')
+    return jsonify({"Created": "File Created"}), 200
+
+@app.route('/list', methods=['GET'])
+def list():
+    lists = os.listdir()
+    return jsonify(lists), 200
+
 
 @app.route('/secret', methods=['GET'])
 def secret():
