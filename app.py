@@ -17,51 +17,58 @@ def encript(data_file, name):
     enp=f"openssl enc -aes-256-cbc -salt -in {data_file} -out {name}.enc -pass pass:{token}"
     return (os.system(enp))
 
-def dip(name, file, token):
+def dip(name, file):
     di= f"openssl enc -d -aes-256-cbc -in {name}.enc -out {file} -pass pass:{token}"
     return (os.system(di))
 
 @app.route('/create', methods=['GET'])
 def create():
-    secret_file = request.args.get('secret_file')
-    os.system(f'touch {secret_file}')
-    return jsonify({"Created": "File Created"}), 200
+    password = request.args.get('password')
+    if password == token:
+        secret_file = request.args.get('secret_file')
+        os.system(f'touch {secret_file}')
+        return jsonify({"Created": "File Created"}), 200
 
 @app.route('/list', methods=['GET'])
 def list():
-    lists = os.listdir()
-    return jsonify(lists), 200
+    password = request.args.get('password')
+    if password == token:
+        lists = os.listdir()
+        return jsonify(lists), 200
 
 
 @app.route('/secret', methods=['GET'])
 def secret():
-    file_enc = request.args.get('file_name')
-    base_name, extension = os.path.splitext(file_enc)
-    dir = os.getcwd()
-    cred = request.args.get('token')
-    file_path = os.path.join(dir, base_name)
-    dip(file_path, base_name, cred)
+    password = request.args.get('password')
+    if password == token:
+        file_enc = request.args.get('file_name')
+        base_name, extension = os.path.splitext(file_enc)
+        dir = os.getcwd()
+        file_path = os.path.join(dir, base_name)
+        dip(file_path, base_name)
 
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as file:
-            content = json.load(file)
-            response = jsonify(content)
-            os.remove(file_path)
-            return response
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as file:
+                content = json.load(file)
+                response = jsonify(content)
+                os.remove(file_path)
+                return response
 
 
 @app.route('/update', methods=['PUT'])
 def update_json():
-    secret_file = request.args.get('file_path')
-    new_data = request.get_json()
-    dip(secret_file, secret_file)
-    existing_data = read_json_file(secret_file)
-
-    existing_data.update(new_data)
-    write_json_file(secret_file, existing_data)
-    encript(secret_file, "data-encript" )
-    os.remove(secret_file)
-    return jsonify({"Updated": "Data updated"}), 200
+    password = request.args.get('password')
+    if password == token:
+        secret_file = request.args.get('file_path')
+        new_data = request.get_json()
+        dip(secret_file, secret_file)
+        existing_data = read_json_file(secret_file)
+    
+        existing_data.update(new_data)
+        write_json_file(secret_file, existing_data)
+        encript(secret_file, "data-encript" )
+        os.remove(secret_file)
+        return jsonify({"Updated": "Data updated"}), 200
 
 
 if __name__ == '__main__':

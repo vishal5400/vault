@@ -38,14 +38,14 @@ python app.py
 You can create a secret file to store secret. Use the following curl command to update a secret:
 
 ```bash
-curl -X GET "http://127.0.0.1:5000/create?secret_file=data"
+curl -X GET "http://127.0.0.1:5000/create?secret_file=data&password=<token>"
 ```
 ### 3. Update a Secret:
 
 You can update a secret in the encrypted file using the PUT request. Use the following curl command to update a secret:
 
 ```bash
-curl -X PUT "http://127.0.0.1:5000/update?file_path=data-encript" \
+curl -X PUT "http://127.0.0.1:5000/update?file_path=data-encript&password=<token>" \
      -H "Content-Type: application/json" \
      -d '{"gender": "male"}'
 ```
@@ -57,7 +57,7 @@ curl -X PUT "http://127.0.0.1:5000/update?file_path=data-encript" \
 To list the encrypted secret file, use the GET request. The following curl command decrypts and retrieves the secret:
 
 ```bash 
-curl -X GET "http://127.0.0.1:5000/list
+curl -X GET "http://127.0.0.1:5000/list?password=<token>
 ```
 
 ### 5. Retrieve a Secret:
@@ -65,7 +65,7 @@ curl -X GET "http://127.0.0.1:5000/list
 To retrieve a secret from the encrypted file, use the GET request. The following curl command decrypts and retrieves the secret:
 
 ```bash
-curl -X GET "http://127.0.0.1:5000/secret?file_name=data-encript&token=asdf123a"
+curl -X GET "http://127.0.0.1:5000/secret?file_name=data-encript&token=<token>"
 ```
 - **file_name:** The name of the encrypted file you want to retrieve the secret from.
 - **token:** The decryption token (password) used to decrypt the file.
